@@ -1,0 +1,18 @@
+[en]
+AFTERBAN_BAN_AMESSAGE = !n[!g%s!n] ban [!g%s!n] for [!t%s!n] | Reason:[!t%s!n]
+AFTERBAN_BAN_MESSAGE = !n[!g%s!n] got banned for [!t%s!n] | Reason:[!t%s!n]
+AFTERBAN_HUD_ATEXT = AfterBan 2017^nAdmin [%s]^nBan [%s]^nFor [%s]^nReason [%s]
+AFTERBAN_HUD_TEXT = AfterBan 2017^nBanned [%s]^nFor [%s]^nReason [%s]
+AFTERBAN_KICKBAN_TEXT = Player!g %s !ngot kicked because of !t%s
+AFTERBAN_DISCBAN_AMESSAGE = !n[!g%s!n] offline ban [!g%s!n] for [!t%s!n] | Reason:[!t%s!n]
+AFTERBAN_DISCBAN_MESSAGE = !n[!g%s!n] got offline banned for [!t%s!n] | Reason:[!t%s!n]
+AFTERBAN_BANCOUNT_TEXT = Connect player [!g%s!n] with [!t%d total ban(s)!n] on a server
+[ru]
+AFTERBAN_BAN_AMESSAGE = !n[!g%s!n] забанил [!g%s!n] на [!t%s!n] | Причина:[!t%s!n]
+AFTERBAN_BAN_MESSAGE = !n[!g%s!n] забанен на [!t%s!n] | Причина:[!t%s!n]
+AFTERBAN_HUD_ATEXT = AfterBan 2017^nАДМИН [%s]^nЗабанил [%s]^nВремя [%s]^nПричина [%s]
+AFTERBAN_HUD_TEXT = AfterBan 2017^nЗабанен [%s]^nВремя [%s]^nПричина [%s]
+AFTERBAN_KICKBAN_TEXT = Игрок!g %s !nбыл кикнут по причине !t%s
+AFTERBAN_DISCBAN_AMESSAGE = !n[!g%s!n] забанил офлайн [!g%s!n] на [!t%s!n] | Причина:[!t%s!n]
+AFTERBAN_DISCBAN_MESSAGE = !n[!g%s!n] забанен офлайн на [!t%s!n] | Причина:[!t%s!n]
+AFTERBAN_BANCOUNT_TEXT = На сервер зашел игрок [!g%s!n] | Общее количество банов !g[!t%d штук(и)!g]
