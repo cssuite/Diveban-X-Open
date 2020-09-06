@@ -116,6 +116,7 @@ stock CheckDataPlayer(data[BannedData], Handle:Query) {
 			szTable,systime,g_info_player[id][CS_PLAYER_NAME], iUid)
 
 		data[BD_BAN_LEN] = (!iBanTime || !iUnbanTime) ?  0 : abs((iBanTime - iUnbanTime) /60);
+		copy(data[BD_BAN_REASON], 63, reason)
 		API_FillBannedData(data, iBanTime, iUnbanTime, admin_name, admin_id, server, ip)
 	
 		Ban_PrintBanInfo(id, data);

@@ -133,8 +133,8 @@ public menu_chooose_user(id, menu, item)
 	g_struct_array[id][PLAYERID] = str_to_num(s_Data)
 
 	// ##		
-	// if(!has_player_access_flag(id,g_struct_array[id][PLAYERID]))
-	// 	return Print(id,"%L", id, "DB_MENU_BAN_IMMUNE", g_info_player[g_struct_array[id][PLAYERID]][CS_PLAYER_NAME])
+	if(!has_player_access_flag(id,g_struct_array[id][PLAYERID]))
+		return Print(id,"%L", id, "DB_MENU_BAN_IMMUNE", g_info_player[g_struct_array[id][PLAYERID]][CS_PLAYER_NAME])
 	
 	if(get_bit(g_in_confirm, id))	MenuBeforeBan(id)
 	else							MenuBanReason(id)

@@ -7,7 +7,7 @@
 #include <sockets>
 
 new const PLUGIN[]=		"DiveBanX"
-new const VERSION[]=	"2020.0"
+new const VERSION[]=	"2020.1"
 new const AUTHOR[]=		"RevCrew"
 
 stock const DB_MENU_VERSION[] = "3.0";
@@ -20,6 +20,10 @@ stock const DB_DISCONNECT_BAN_VERSION[] = "2.0";
 #define BAN_DEBUG
 
 //#pragma dynamic 32768
+/**
+	[2020.1]
+	 - Исправлен баг с отображением причины бана в консоли
+ */
 
 // Переменные
 #include <divebans/global_vars.inl>
