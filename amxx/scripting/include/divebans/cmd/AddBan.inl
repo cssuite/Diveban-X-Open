@@ -26,7 +26,6 @@ public CmdAddBan(id) {
 		return AddDisconnectBan(id, discID, time, reason)
 	}
 
-
 	new data[DelayedData];
 	new res = Delayed_Find(data, target)
 
@@ -51,7 +50,7 @@ public CmdFastBan(id, level, cid)
  */
 public CmdMenuBan(id, player, minutes, reason[])
 {
-	CmdAddBan(id)
+	AddPlayerBan(id, player, minutes, reason)
 	return ExecuteForward(g_forward[DV_BAN_PRE],ret,data[BAN_ADMIN_ID],data[BAN_PLAYER_ID],data[BAN_TIME],data[BAN_REASON]);
 }
 
