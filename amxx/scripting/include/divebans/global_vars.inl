@@ -153,4 +153,4 @@ new g_secret_key[32]
 new TimeGap;
 new offs;
 
-new bool:PluginEnable = false;
+new bool:PluginEnable = true;

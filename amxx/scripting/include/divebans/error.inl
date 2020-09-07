@@ -18,8 +18,6 @@ stock ErrorDetect(const szMessage[], any:...)
 	get_basedir(LogFile,63)
 	formatex(LogFile,63,"%s/logs/DiveBan/Log_%s.log",LogFile,LogDat);
 	
-	PluginEnable = false;
-	
 	new error_msg[256];
 	formatex(error_msg, 255, "Plugin [%s] take ERROR:[%s]", PLUGIN, szMsg);
 	log_to_file(LogFile,error_msg);

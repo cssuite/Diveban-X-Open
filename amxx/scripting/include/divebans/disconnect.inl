@@ -124,7 +124,6 @@ RefreshDisconnect(id)
 		data[dd_immune_flag] = 3;
 
 	ArraySetArray(g_array, playerID, data)
-	PrintMessage("[Offline] Update player %s", data[dd_name])
 }
 /* Return ID of disc ban */
 find_disconnect_ban( const ID[] )
