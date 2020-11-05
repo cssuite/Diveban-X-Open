@@ -7,10 +7,10 @@ class Divebans
     private $table = 'divebans';
 
     /* Укажите данные для подключения к базе данных */
-    private $db_host = '46.174.50.9';
-    private $db_user = 'u3252_swag';
-    private $db_pass = 'mikelsxx112';
-	private $db_db = 'u3252_bans';
+    private $db_host = '';
+    private $db_user = '';
+    private $db_pass = '';
+	private $db_db = '';
 	
 	static $instance = null;
 
