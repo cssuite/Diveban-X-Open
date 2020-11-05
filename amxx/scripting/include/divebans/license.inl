@@ -33,5 +33,6 @@ stock bool:GetCFGKey(FileCFG[], key[], output[], len)
 
 stock bool: license ( id = 0 )
 {
-	return true;
+	// GG
+	return id ? true : true;
 }
