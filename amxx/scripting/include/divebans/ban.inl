@@ -337,7 +337,7 @@ stock Ban_MakeQuery( data[BannedData], szTemp[], tmp_len ) {
 
 	new szSubnet[256], subnet[BAN_IP_LEN]
 	get_ip_subnet( 0, data[BD_BAN_IP], BAN_IP_LEN - 1, subnet, BAN_IP_LEN - 1);
-	formatex(szSubnet, charsmax(szSubnet), "( (ip like '%%%s%%' OR ipcookie LIKE '%%%s%%') AND bantype LIKE '%%%с%%')", subnet, subnet, Ban_GetBanType(BAN_TYPE_SUBNET))
+	formatex(szSubnet, charsmax(szSubnet), "(( (ip like '%%%s%%' OR ipcookie LIKE '%%%s%%') AND bantype LIKE '%%%с%%')  AND `bantime` > '%d')", subnet, subnet, Ban_GetBanType(BAN_TYPE_SUBNET), sub_time)
 
 	new szFullSubnet[256]
 	get_ip_subnet( 1, data[BD_BAN_IP], BAN_IP_LEN - 1, subnet, BAN_IP_LEN - 1);
