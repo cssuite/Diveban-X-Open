@@ -2,7 +2,6 @@
 
 $admins = DataBase::getInstance()->fetchAll(Configuration::$banlist['admins_table'], [], ['name' => 'timelast']);
 
-if ($admins) {
     $content .= '
 		<div class="well well-small">
 			<ul class="breadcrumb alert alert-info">
@@ -100,14 +99,3 @@ if ($admins) {
     $content .= '
     <br />
     <center><a href="{url}admin.php?do=admins&add" title="Добавить Админа/Vip(а)"><button class="btn btn-sm btn-warning" ><i class="icon-plus icon-white"></i> <b>Добавить Админа/Vip(а)</b></button></a></center>';
-} else {
-    $content .= '
-<div class="alert alert-error">
-    <table width="90%">
-        <tr>
-            <td><img src="{url}style/img/oshibka.png" width="150" height="150"/></td>
-            <td><center><h4 class="alert-heading">Ошибка!</h4> <p><b>У вас не достаточно прав для редактирования списка, это могут делать только пользователи относящиеся к группе: "Гл. Администратор".<b></p></center></td>
-        </tr>
-    </table>
-</div>';
-}
