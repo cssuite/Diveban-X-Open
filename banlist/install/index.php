@@ -118,12 +118,12 @@ if (!file_exists('install.lock')) {
                 if (mb_strtolower($_POST['password']) == mb_strtolower($_POST['password2'])) {
                     $error = false;
                     $database = mysqli_connect(Configuration::$db['db_serv'], Configuration::$db['db_user'], Configuration::$db['db_pass'], Configuration::$db['db_name']) or $error = mysqli_connect_error();
-                    @mysqli_query($database,"INSERT INTO `suite_users` (`name`, `password`, `group`) VALUES ('" . mysql_escape_string(mb_strtolower($_POST['name'])) . "', '" . md5(mb_strtolower($_POST['password'])) . "', '1')") or $error = mysqli_error($database);
+                    @mysqli_query($database,"INSERT INTO `suite_users` (`name`, `password`, `group`) VALUES ('" . mysqli_escape_string(mb_strtolower($_POST['name'])) . "', '" . md5(mb_strtolower($_POST['password'])) . "', '1')") or $error = mysqli_error($database);
                     if ($error) {
                         $content .= '<div class="alert alert-error"><b>Ошибка базы данных: "' . $error . '"</b></div>';
                     } else {
                         $content .= '<hr><div class="alert alert-success"><b>Администратор успешно создан!</b></div><a href="{url}index.php?step=2"><button class="btn btn-info" ><i class="icon-chevron-left icon-white"></i> Назад</button></a> <a href="{url}index.php?step=4"><button class="btn btn-info" >Продолжить <i class="icon-chevron-right icon-white"></i></button></a>';
-                        $_SESSION['admin_login'] = mysql_escape_string(mb_strtolower($_POST['name']));
+                        $_SESSION['admin_login'] = mysqli_escape_string(mb_strtolower($_POST['name']));
                         $_SESSION['admin_password'] = mb_strtolower($_POST['password']);
                     }
                 } else {
