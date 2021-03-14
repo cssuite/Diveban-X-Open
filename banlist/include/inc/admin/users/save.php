@@ -8,7 +8,7 @@ if( !$name ) $error[] =  'имя';
 if( !$group) $error[] =  'группу';
 if( !$password) $error[] =  'пароль';
 
-if ( !isset($error) ) {
+if ( !$error ) {
     // If already exists
     if (isset($_POST['id'])) {
         DataBase::getInstance()->updateRow(Configuration::$banlist['users_table'], [ 'name' => $name, 'password' => md5($password), 'group' => (int)$group ], [ 'id' => (int)$_POST['id']]);
