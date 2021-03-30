@@ -8,7 +8,7 @@
 #include <sqlx>
 
 #define PLUGIN "AfterBan"
-#define VERSION "2019.0"
+#define VERSION "2021.0"
 #define AUTHOR "RevCrew"
 
 #define DATE "4.11.2018"
@@ -76,11 +76,20 @@ new Handle:iCore;
 new amx_passwd_info[22];
 new amx_def_flag[2]
 
-//forward divebans_banned_pre(const admin,const player,const minutes,const reason[])
-forward divebans_banned_post(const admin,const player,const minutes,const reason[]);
-forward divebans_kickbanlist_pre(const player,const bantype[],const reason[]);
-forward divebans_disconnect_ban(const admin, const name[], const ip[], const minutes, const reason[]);
-forward divebans_connect_with_ban(const id, const bans_count);
+const BAN_STRING_LEN = 64;
+const BAN_IP_LEN = 22
+
+enum _:BannedData {
+
+	/* Required Params */
+	BD_BAN_NAME[BAN_STRING_LEN],BD_BAN_STEAM[BAN_IP_LEN],BD_BAN_IP[BAN_IP_LEN],BD_BAN_COOKIE[BAN_IP_LEN],BD_BAN_UID[BAN_IP_LEN],BD_BAN_DIVEID[BAN_IP_LEN],BD_BAN_CDKEY[33],
+	BD_BAN_LEN,BD_BAN_REASON[BAN_STRING_LEN],BD_BAN_TIME,BD_BAN_UNBAN_TIME,BD_BAN_ADMIN_NAME[BAN_STRING_LEN],BD_BAN_ADMIN_ID[BAN_IP_LEN],BD_BAN_TYPE[BAN_IP_LEN],
+	BD_BAN_SERVER[BAN_STRING_LEN],BD_BAN_SERVER_IP[BAN_IP_LEN],BD_BAN_ADMIN_PLAYER_ID,BD_BAN_BANTYPE,BD_BAN_PLAYER_ID
+}
+
+forward divebanx_addban(id, data[BannedData], const bantype);
+forward divebanx_kick_player(const player,const admin_name[],const reason[]);
+forward divebanx_history_bans(const id, const bans_count);
 
 enum _:AdminData
 {
@@ -366,14 +375,17 @@ public client_putinserver(id)
 	if(!is_user_admin(id)) set_user_flags(id, read_flags(amx_def_flag))
 }
 
-public divebans_banned_post(const admin,const player,const minutes,const reason[])
+public divebanx_addban(id, data[BannedData], const bantype)
 {
-	static player_name[32], ban_time[64], admin_name[32]
+	static player_name[32], ban_time[64], admin_name[32], reason[64];
+
+	new player = data[BD_BAN_PLAYER_ID];
 	
-	get_user_name(player,player_name, charsmax(player_name))
-	get_user_name(admin,admin_name, charsmax(admin_name))
-	
-	get_time_length(0, minutes, timeunit_minutes, ban_time, 63)
+	copy(admin_name, charsmax(admin_name), data[BD_BAN_ADMIN_NAME])
+	copy(player_name, charsmax(player_name), data[BD_BAN_NAME])
+	copy(reason, charsmax(reason), data[BD_BAN_REASON])
+
+	get_time_length(0, data[BD_BAN_LEN], timeunit_minutes, ban_time, 63)
   
 	new prefix[32];
 	get_pcvar_string(g_Cvars[CVAR_BAN_PREFIX], prefix, charsmax(prefix))
@@ -382,7 +394,7 @@ public divebans_banned_post(const admin,const player,const minutes,const reason[
 	else						client_print_color(0, RED, "^1[^3%s^1] %L",prefix, LANG_PLAYER, "AFTERBAN_BAN_MESSAGE", player_name, ban_time, reason);
 
 	//SnapShoot
-	set_task(0.25, "SnapshotPlayer", player+TASK_SNAP, _,_, "a", get_pcvar_num(g_Cvars[CVAR_SNAPSHOT_TIMES]))
+	set_task(0.5, "SnapshotPlayer", player+TASK_SNAP, _,_, "a", get_pcvar_num(g_Cvars[CVAR_SNAPSHOT_TIMES]))
 	
 	static color[16];
 	get_pcvar_string(g_Cvars[CVAR_BANHUD_COLOR], color, charsmax(color))
@@ -404,7 +416,7 @@ public divebans_banned_post(const admin,const player,const minutes,const reason[
 	}
 }
 
-public divebans_kickbanlist_pre(const player,const bantype[],const reason[])
+public divebanx_kick_player(const player,const admin_name[],const reason[])
 {
 	static name[32],prefix[32];
 	get_user_name(player, name, charsmax(name));
@@ -412,7 +424,7 @@ public divebans_kickbanlist_pre(const player,const bantype[],const reason[])
 	
 	client_print_color(0, RED, "^1[^3%s^1] %L",prefix, LANG_PLAYER, "AFTERBAN_KICKBAN_TEXT", name,reason);
 }
-public divebans_connect_with_ban(const id, const bans_count)
+public divebanx_history_bans(const id, const bans_count)
 {
 	new p[32], c, player;
 	get_players(p,c, "ch")

@@ -32,9 +32,11 @@ enum _:BannedData {
 
 	/* Other */
 
+	// Длительность бана в минутах
 	BD_BAN_LEN,
 	BD_BAN_REASON[BAN_STRING_LEN],
 
+	// Дата бана и разбана
 	BD_BAN_TIME,
 	BD_BAN_UNBAN_TIME,
 
@@ -183,7 +185,7 @@ stock _Ban(data[BannedData]) {
 		}
 	}
 
-	new prepareArray = PrepareArray(data, charsmax(data))
+	new prepareArray = PrepareArray(data, sizeof data)
 	
 	new ret;
 	return ExecuteForward(g_forward[DB_BAN_BAN],ret,id, prepareArray, szBanType)
