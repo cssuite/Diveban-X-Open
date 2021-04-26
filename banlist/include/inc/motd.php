@@ -16,7 +16,7 @@ foreach ($bans as $ban) {
     $unbantime = (int)$ban['unbantime'];
 
     if ( $unbantime == 0) {
-        $unban = '<span rel="tooltip" data-placement="right" class="label label-important" data-original-title="Бан активный">Навсегда</span>';
+        $unban = '<span rel="tooltip" data-placement="right" class="label label-danger" data-original-title="Бан активный">Навсегда</span>';
         $fons = ($ban['ip'] == $_SERVER['REMOTE_ADDR'] OR $ban['ipcookie'] == $_SERVER['REMOTE_ADDR']) ? 'class="warning"' : 'class="danger"';
     }
 

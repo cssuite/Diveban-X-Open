@@ -313,8 +313,7 @@ stock Ban_MakeQuery( data[BannedData], szTemp[], tmp_len ) {
 	new sub_time = TimeGap + systime - get_pcvar_num(g_Cvars[CVAR_MAX_EFFECT_BANTIME])*120
 
 	// Validate DivID
-	new divid[32]; 	copy(divid, charsmax(divid), "errorDiveID")
-	if ( strlen(data[BD_BAN_DIVEID]) > 30 ) formatex(divid, charsmax(divid), "%s",data[BD_BAN_DIVEID]);
+	new divid[32]; formatex(divid, charsmax(divid), "%s",data[BD_BAN_DIVEID]);
 
 	// Validate CDKey
 	new cdkey[34]; 	copy(cdkey, charsmax(cdkey), "InvalidCDKey")
