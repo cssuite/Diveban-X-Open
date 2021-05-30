@@ -7,7 +7,7 @@
 #include <sockets>
 
 new const PLUGIN[]=		"DiveBanX"
-new const VERSION[]=	"2020.1"
+new const VERSION[]=	"2021.0"
 new const AUTHOR[]=		"RevCrew"
 
 stock const DB_MENU_VERSION[] = "3.0";
