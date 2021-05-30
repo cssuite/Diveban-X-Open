@@ -87,7 +87,7 @@ stock CheckDataPlayer(data[BannedData], Handle:Query) {
 			
 		new iUid = SQL_ReadResult(Query, SQL_FieldNameToNum(Query, "banid"));
 			
-		new reason[64],ip[26],admin_name[32],admin_id[20],server[32],szTemp[256]
+		new reason[64],ip[26],admin_name[32],admin_id[20],server[32],szTemp[512]
 		
 		new last_name[26];
 		SQL_ReadResult(Query, SQL_FieldNameToNum(Query,"name"), last_name,sizeof(last_name) -1);
@@ -112,7 +112,7 @@ stock CheckDataPlayer(data[BannedData], Handle:Query) {
 		ExecuteForward(g_forward[DB_KICK_PRE],ret,id,admin_name,reason);
 		
 		formatex(szTemp,charsmax(szTemp),
-			"UPDATE `%s` SET `time` = '%d', `name` = '%s', `Bans_Kick` = `Bans_Kick` + 1 WHERE `banid`='%d'",\
+			"SET NAMES UTF8;UPDATE `%s` SET `time` = '%d', `name` = '%s', `Bans_Kick` = `Bans_Kick` + 1 WHERE `banid`='%d'",\
 			szTable,systime,g_info_player[id][CS_PLAYER_NAME], iUid)
 
 		data[BD_BAN_LEN] = (!iBanTime || !iUnbanTime) ?  0 : abs((iBanTime - iUnbanTime) /60);
