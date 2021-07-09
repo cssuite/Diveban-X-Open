@@ -394,7 +394,7 @@ public divebanx_addban(id, data[BannedData], const bantype)
 	new prefix[32];
 	get_pcvar_string(g_Cvars[CVAR_BAN_PREFIX], prefix, charsmax(prefix))
 
-	static ban_message_type = get_pcvar_num(g_Cvars[CVAR_BAN_MESSAGE_TYPE]);
+	new ban_message_type = get_pcvar_num(g_Cvars[CVAR_BAN_MESSAGE_TYPE]);
 
 	if (ban_message_type == BAN_MESSAGE_TYPE_CHAT || ban_message_type == BAN_MESSAGE_TYPE_ALL) {
 		if(get_pcvar_num(g_Cvars[CVAR_SHOW_ADMIN]))	{
