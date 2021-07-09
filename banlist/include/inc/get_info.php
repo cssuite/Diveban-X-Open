@@ -20,12 +20,14 @@ else {
     $(\'#adminDelete\').attr({\'href\': \'admin.php?do=bans&delete='.$data['banid'].'\'});
     ';
 }
+
+$unbantime = !intval($data["unbantime"]) ? 'Никогда'  : date("d.m.Y [H:i]", $data["unbantime"]);
 echo '
 $(\'#detail-nick\').html(\' '.$data['banname'].' \');
 $(\'#detail-steam\').html(\''.$data['steam'].'\');
 $(\'#detail-ip\').html(\' '.$data['ip'].' \');
 $(\'#detail-add\').html(\''.date("d.m.Y [H:i]", $data["bantime"]).'\');
-$(\'#detail-remove\').html(\''.date("d.m.Y [H:i]", $data["unbantime"]).'\');
+$(\'#detail-remove\').html(\''.$unbantime.'\');
 $(\'#detail-admin\').html(\''.$data['admin'].'\');
 $(\'#detail-reason\').html(\''.$data['reason'].'\');
 $(\'#detail-last-name\').html(\''.$data['name'].'\');

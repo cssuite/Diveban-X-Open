@@ -276,7 +276,6 @@ stock Ban_PrintBanInfo( const id, data[BannedData]) {
 		formatex(date_unban, charsmax(date_unban), "-------------")
 
 	client_cmd(id,"echo ^"^"")
-	client_cmd(id,"echo ^"-------------[DiveBan X %s]-------------^"", VERSION)
 	
 	for(new i; i< size; i++)
 	{
@@ -296,12 +295,14 @@ stock Ban_PrintBanInfo( const id, data[BannedData]) {
 		replace(filedata, charsmax(filedata), "%date_of_ban%", date_ban)
 		replace(filedata, charsmax(filedata), "%date_of_unban%", date_unban)
 
+		replace(filedata, charsmax(filedata), "%plugin_name%", PLUGIN)
+		replace(filedata, charsmax(filedata), "%plugin_version%", VERSION)
+
 		replace_all(filedata,charsmax(filedata),"^n", "")
 		replace_all(filedata,charsmax(filedata),"^r", "")
 		client_cmd(id,"echo ^"%s^"",filedata)
 	}
 	
-	client_cmd(id,"echo ^"-------------[DiveBan X %s]-------------^"", VERSION)
 	client_cmd(id,"echo ^"^"")
 }
 

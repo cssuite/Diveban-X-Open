@@ -29,7 +29,7 @@ function page_default_main()
 		<span style="color:black;font-weight:bold;">IP Адрес — '.$_SERVER['REMOTE_ADDR'].'. Вы забанены. <a href="{url}index.php?search='.$_SERVER['REMOTE_ADDR'].'"><i class="icon-eye-open"></i></a></span>
 		</div>';
 	} else {
-		$check = '<div class="alert alert-success" style="border-color:">
+		$check = '<div class="alert alert-success">
 		<span style="color:black;font-weight:bold;">IP Адрес — '.$_SERVER['REMOTE_ADDR'].'. Не волнуйтесь, все хорошо. Вы не в бане.</span>
 		</div>';
 	}

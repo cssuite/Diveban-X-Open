@@ -53,6 +53,13 @@ const ID_LEN = 25
 
 const TASK_SNAP = 1056
 
+/**
+	Тип сообщения о бане (для квара CVAR_BAN_MESSAGE_TYPE)
+ */
+const BAN_MESSAGE_TYPE_CHAT = 0
+const BAN_MESSAGE_TYPE_HUD = 1
+const BAN_MESSAGE_TYPE_ALL = 2
+
 enum CVARS
 {
 	CVAR_ADMIN_ON,
@@ -67,7 +74,9 @@ enum CVARS
 	CVAR_BANHUD_COLOR,
 	
 	CVAR_FREEZE_PLAYER,
-	CVAR_STRIP_PLAYER
+	CVAR_STRIP_PLAYER,
+
+	CVAR_BAN_MESSAGE_TYPE
 }
 
 new g_Cvars[CVARS];
@@ -120,6 +129,7 @@ public plugin_precache()
 
 	g_Cvars[CVAR_FREEZE_PLAYER] = register_cvar("af_freeze_player","1");
 	g_Cvars[CVAR_STRIP_PLAYER] = register_cvar("af_strip_player","1");
+	g_Cvars[CVAR_BAN_MESSAGE_TYPE] = register_cvar("af_ban_message_type","2");
 
 	new cfg[64];
 	get_configsdir(cfg, charsmax(cfg))
@@ -311,11 +321,7 @@ stock AuthAdmin(id)
 	get_user_name(id, name,ID_LEN);
 	get_user_ip(id, ip, charsmax(ip), 1)
 
-	log_amx("Start check Player '%s'", name)
-
 	new admin_id = GetAdminID(authid, name)
-	
-	log_amx("AdminID '%s' : '%d'", name, admin_id)
 
 	if(admin_id == -1)
 	{
@@ -344,8 +350,6 @@ stock AuthAdmin(id)
 		PrintMessage("Player %s (%s)(%s) invalid password [Has:%s][Need:%s] [ID:%s]",name,authid,ip, info , data[Passwd], status)
 		return server_cmd("kick #%d ^"[Af] Invalid Password^"",get_user_userid(id));
 	}
-	
-	log_amx("SetAdminTime '%s' : '%d'", name, admin_id)
 
 	g_admin_time[id] = !data[TLast] ? 0 : (data[TLast] - sys)/(3600*24);
 
@@ -390,25 +394,35 @@ public divebanx_addban(id, data[BannedData], const bantype)
 	new prefix[32];
 	get_pcvar_string(g_Cvars[CVAR_BAN_PREFIX], prefix, charsmax(prefix))
 
-	if(get_pcvar_num(g_Cvars[CVAR_SHOW_ADMIN]))	client_print_color(0, RED, "^1[^3%s^1] %L",prefix, LANG_PLAYER, "AFTERBAN_BAN_AMESSAGE", admin_name, player_name, ban_time, reason);
-	else						client_print_color(0, RED, "^1[^3%s^1] %L",prefix, LANG_PLAYER, "AFTERBAN_BAN_MESSAGE", player_name, ban_time, reason);
+	static ban_message_type = get_pcvar_num(g_Cvars[CVAR_BAN_MESSAGE_TYPE]);
+
+	if (ban_message_type == BAN_MESSAGE_TYPE_CHAT || ban_message_type == BAN_MESSAGE_TYPE_ALL) {
+		if(get_pcvar_num(g_Cvars[CVAR_SHOW_ADMIN]))	{
+			client_print_color(0, RED, "^1[^3%s^1] %L",prefix, LANG_PLAYER, "AFTERBAN_BAN_AMESSAGE", admin_name, player_name, ban_time, reason);
+		} else {
+			client_print_color(0, RED, "^1[^3%s^1] %L",prefix, LANG_PLAYER, "AFTERBAN_BAN_MESSAGE", player_name, ban_time, reason);
+		}
+	}
+
+	if (ban_message_type == BAN_MESSAGE_TYPE_HUD || ban_message_type == BAN_MESSAGE_TYPE_ALL) {
+		static color[16];
+		get_pcvar_string(g_Cvars[CVAR_BANHUD_COLOR], color, charsmax(color))
+		
+		replace_all(color, charsmax(color), "x", " ");
+
+		new rgb[3][4];
+		parse(color, rgb[0], 3, rgb[1], 3, rgb[2], 3)
+
+		//HudMessage
+		set_hudmessage(str_to_num(rgb[0]),str_to_num(rgb[1]),str_to_num(rgb[2]), get_pcvar_float(g_Cvars[CVAR_BANHUD_X]), get_pcvar_float(g_Cvars[CVAR_BANHUD_Y]),0,1.0,12.0,1.0,1.0,2);
+	
+		if(get_pcvar_num(g_Cvars[CVAR_SHOW_ADMIN]))	show_hudmessage(0, "%L", LANG_PLAYER, "AFTERBAN_HUD_ATEXT", admin_name,player_name,ban_time,reason) 
+		else						show_hudmessage(0, "%L", LANG_PLAYER, "AFTERBAN_HUD_TEXT", player_name,ban_time,reason)
+	}
 
 	//SnapShoot
 	set_task(0.5, "SnapshotPlayer", player+TASK_SNAP, _,_, "a", get_pcvar_num(g_Cvars[CVAR_SNAPSHOT_TIMES]))
-	
-	static color[16];
-	get_pcvar_string(g_Cvars[CVAR_BANHUD_COLOR], color, charsmax(color))
-	
-	replace_all(color, charsmax(color), "x", " ");
-	
-	new rgb[3][4];
-	parse(color, rgb[0], 3, rgb[1], 3, rgb[2], 3)
-	
-	//HudMessage
-	set_hudmessage(str_to_num(rgb[0]),str_to_num(rgb[1]),str_to_num(rgb[2]), get_pcvar_float(g_Cvars[CVAR_BANHUD_X]), get_pcvar_float(g_Cvars[CVAR_BANHUD_Y]),0,1.0,12.0,1.0,1.0,2);
-	
-	if(get_pcvar_num(g_Cvars[CVAR_SHOW_ADMIN]))	show_hudmessage(0, "%L", LANG_PLAYER, "AFTERBAN_HUD_ATEXT", admin_name,player_name,ban_time,reason) 
-	else						show_hudmessage(0, "%L", LANG_PLAYER, "AFTERBAN_HUD_TEXT", player_name,ban_time,reason)
+
 	if(is_user_alive(player))
 	{
 		if(get_pcvar_num(g_Cvars[CVAR_FREEZE_PLAYER]))	freeze_player(player)

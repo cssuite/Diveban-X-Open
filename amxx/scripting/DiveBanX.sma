@@ -7,7 +7,7 @@
 #include <sockets>
 
 new const PLUGIN[]=		"DiveBanX"
-new const VERSION[]=	"2021.0"
+new const VERSION[]=	"2021.1"
 new const AUTHOR[]=		"RevCrew"
 
 stock const DB_MENU_VERSION[] = "3.0";
@@ -15,14 +15,26 @@ stock const DB_CACHE_PLAYER_VERSION[] = "1.0";
 stock const DB_DELAYED_BAN_VERSION[] = "1.0";
 stock const DB_DISCONNECT_BAN_VERSION[] = "2.0";
 
-#define DIVEBAN_CORE_DEBUG
-#define DIVEBAN_X_DEBUG
-#define BAN_DEBUG
+// #define DIVEBAN_CORE_DEBUG
+// #define DIVEBAN_X_DEBUG
+// #define BAN_DEBUG
 
 //#pragma dynamic 32768
 /**
 	[2020.1]
 	 - Исправлен баг с отображением причины бана в консоли
+
+	[2021.1]
+	 - Сообщение бана в консоли содержит название плагина и версию, которые теперь можно убирать (console_messages.ini)
+	 - [AfterBan] Добавлен тип отображения бана(чат, худ, чат + худ)
+	 - [Banlist] Бан навсегда отображается теперь корректно а не 01.01.1970 00:00
+	 - Исправлено отображение русских ников в банлисте
+	 - Исправлен бан по DivID (раньше одного и того же игрока можно было забанить несколько раз)
+	 - [Banlist] Исправлено отображение некоторых кнопок 
+	 - Обновлен плагин AfterBan, теперь он работает с самой новой версией бана
+	 - [Banlist] Исправлены некоторые баги при установке
+	 - [Banlist] Исправлены некоторые баги в админке
+
  */
 
 // Переменные
@@ -80,10 +92,6 @@ stock const DB_DISCONNECT_BAN_VERSION[] = "2.0";
 	SQL Query
  */
 #include <divebans/query/Handlers.inl>
-
-
-//#define DIVEBAN_X_DEBUG
-//#define DIVEBAN_CORE_DEBUG
 
 public plugin_precache()
 {
