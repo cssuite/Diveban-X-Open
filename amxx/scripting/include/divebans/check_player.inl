@@ -51,6 +51,7 @@ public TaskCheckPlayer(id)
 
 	new query[QUERY_MAX_LEN]
 	Ban_MakeQuery(data, query, charsmax(query))
+
 	SQL_ThreadQuery(g_SqlTuple,"LoadDataPlayer",query, data, sizeof data)
 	
 	return PLUGIN_CONTINUE;	

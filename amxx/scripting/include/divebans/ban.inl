@@ -309,9 +309,15 @@ stock Ban_PrintBanInfo( const id, data[BannedData]) {
 stock Ban_MakeQuery( data[BannedData], szTemp[], tmp_len ) {
 	new systime = get_systime()
 
-	new max_effect_bantime = TimeGap + systime - get_pcvar_num(g_Cvars[CVAR_MAX_EFFECT_BANTIME])*300
-	new cdkey_time = TimeGap + systime - get_pcvar_num(g_Cvars[CVAR_MAX_EFFECT_BANTIME])*45
-	new sub_time = TimeGap + systime - get_pcvar_num(g_Cvars[CVAR_MAX_EFFECT_BANTIME])*120
+	//default value(1440) * 60 == 1 day
+	new max_effect_bantime_in_minutes = get_pcvar_num(g_Cvars[CVAR_MAX_EFFECT_BANTIME]) * 60
+
+	// Ban by IP will be active for 30 days, when default value is 1440
+	new max_effect_bantime = TimeGap + systime - (max_effect_bantime_in_minutes * 30)
+	//Ban by CDKey, DivID will be active for 1 day when default value is 1440
+	new cdkey_time = TimeGap + systime - (max_effect_bantime_in_minutes)
+	//Ban by Subnet and Full subnet will be active for 7 day when default value is 1440
+	new sub_time = TimeGap + systime - (max_effect_bantime_in_minutes*7)
 
 	// Validate DivID
 	new divid[32]; formatex(divid, charsmax(divid), "%s",data[BD_BAN_DIVEID]);
@@ -329,30 +335,30 @@ stock Ban_MakeQuery( data[BannedData], szTemp[], tmp_len ) {
 
 	new szAuthid[128], szSteam[32]; copy(szSteam, charsmax(szSteam), "Error STEAM")
 	if (is_valid_steamid(data[BD_BAN_STEAM]))	formatex(szSteam, charsmax(szSteam), "%s",data[BD_BAN_STEAM]);
-	formatex(szAuthid, charsmax(szAuthid), "( steam='%s' AND bantype LIKE '%%%c%%' )", szSteam, Ban_GetBanType(BAN_TYPE_AUTHID))
+	formatex(szAuthid, charsmax(szAuthid), "( steam='%s' AND bantype LIKE '%%A%%' )", szSteam)
 
 	new szIp[128];
-	formatex(szIp, charsmax(szIp), "(ip='%s' AND bantype LIKE '%%%с%%' AND `bantime` > '%d')",data[BD_BAN_IP], Ban_GetBanType(BAN_TYPE_IP), max_effect_bantime)
+	formatex(szIp, charsmax(szIp), "(ip='%s' AND bantype LIKE '%%I%%' AND `bantime` > '%d')",data[BD_BAN_IP], max_effect_bantime)
 
 	new szCookie[128];
-	formatex(szCookie, charsmax(szCookie), "( ipcookie LIKE '%%%s%%' AND `bantype` LIKE '%%%c%%' AND `bantime` > '%d')",data[BD_BAN_COOKIE], Ban_GetBanType(BAN_TYPE_COOKIE), max_effect_bantime)
+	formatex(szCookie, charsmax(szCookie), "( ipcookie LIKE '%%%s%%' AND `bantype` LIKE '%%C%%' AND `bantime` > '%d')",data[BD_BAN_COOKIE], max_effect_bantime)
 
 	new szSubnet[256], subnet[BAN_IP_LEN]
 	get_ip_subnet( 0, data[BD_BAN_IP], BAN_IP_LEN - 1, subnet, BAN_IP_LEN - 1);
-	formatex(szSubnet, charsmax(szSubnet), "(( (ip like '%%%s%%' OR ipcookie LIKE '%%%s%%') AND bantype LIKE '%%%с%%')  AND `bantime` > '%d')", subnet, subnet, Ban_GetBanType(BAN_TYPE_SUBNET), sub_time)
+	formatex(szSubnet, charsmax(szSubnet), "(( (ip like '%%%s%%' OR ipcookie LIKE '%%%s%%') AND bantype LIKE '%%S%%')  AND `bantime` > '%d')", subnet, subnet, sub_time)
 
 	new szFullSubnet[256]
 	get_ip_subnet( 1, data[BD_BAN_IP], BAN_IP_LEN - 1, subnet, BAN_IP_LEN - 1);
-	formatex(szFullSubnet, charsmax(szFullSubnet), "( ( (ip like '%%%s%%' OR ipcookie LIKE '%%%s%%') AND bantype LIKE '%%%с%%') AND `bantime` > '%d')",subnet, subnet, Ban_GetBanType(BAN_TYPE_FULL_SUBNET), sub_time)
+	formatex(szFullSubnet, charsmax(szFullSubnet), "( ( (ip like '%%%s%%' OR ipcookie LIKE '%%%s%%') AND bantype LIKE '%%F%%') AND `bantime` > '%d')",subnet, subnet, sub_time)
 
 	new szUid[128];
-	formatex(szUid, charsmax(szUid), "( uid='%s' AND bantype LIKE '%%%c%%' )",uid, Ban_GetBanType(BAN_TYPE_UID))
+	formatex(szUid, charsmax(szUid), "( uid='%s' AND bantype LIKE '%%U%%' )",uid)
 
 	new szCdKey[128];
-	formatex(szCdKey, charsmax(szCdKey), "( cdkey='%s' AND bantype LIKE '%%%c%%' and `bantime` > '%d' )",cdkey, Ban_GetBanType(BAN_TYPE_CDKEY), cdkey_time)
+	formatex(szCdKey, charsmax(szCdKey), "( cdkey='%s' AND bantype LIKE '%%K%%' and `bantime` > '%d' )",cdkey, cdkey_time)
 
 	new szDivID[128];
-	formatex(szDivID, charsmax(szDivID), " ( diveid='%s' AND bantype LIKE '%%%c%%' and `bantime` > '%d' )",divid, Ban_GetBanType(BAN_TYPE_DIVEID), cdkey_time)
+	formatex(szDivID, charsmax(szDivID), " ( diveid='%s' AND bantype LIKE '%%D%%' and `bantime` > '%d' )",divid, cdkey_time)
 
 	new len = formatex(szTemp,tmp_len,\
 		" 	SELECT * FROM `%s` WHERE (\
@@ -414,9 +420,6 @@ stock bool:Ban_CheckRequiredParams( data[BannedData] ) {
 	return true;
 }
 
-stock Ban_GetBanType( const banTypeID ) {
-	return g_ban_types[banTypeID];
-}
 
 stock GetBanType( iGet[], iLen )
 {

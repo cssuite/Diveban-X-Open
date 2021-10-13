@@ -100,6 +100,16 @@ stock get_ip_subnet( const type, ipData[], len, subnet[], slen) {
 	subnet[slen] = '^0';
 }
 
+stock logQuery( qstring[] ) {
+	new LogDat[16]
+	get_time("%Y_%m_%d", LogDat, 15);
+
+	new LogFile[64];
+	getDirByType(DirData:DIR_LOG, LogFile, charsmax(LogFile), "QueryLog_debug_%s.log", LogDat)
+
+	write_file(LogFile, qstring, -1);
+}
+
 /*
 get_dir_vars( out, len, saveToPath[] = "") {
 	if ( !strlen(saveToPath) )
