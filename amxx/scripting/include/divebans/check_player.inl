@@ -68,7 +68,7 @@ PlayerReady(id, bool:ban = false) {
 
 	RefreshDisconnect(id)
 	Delayed_AddPlayer(id)
-	player_ban_count(id)
+	//player_ban_count(id)
 }
 
 stock CheckDataPlayer(data[BannedData], Handle:Query) {
@@ -137,12 +137,11 @@ stock CheckDataPlayer(data[BannedData], Handle:Query) {
 
 public TaskKickPlayer(id)
 {
-	if(id > TASK_KICK_PLAYER) 
+	log_amx("[DiveBan] TaskKickPlayer %d (%d), Connected(%d), UserId (%d)", id, id - TASK_KICK_PLAYER, is_user_connected(id-TASK_KICK_PLAYER), get_user_userid(id-TASK_KICK_PLAYER))
+
+	if(id >= TASK_KICK_PLAYER) 
 		id -=TASK_KICK_PLAYER;
-	
-	if(id > 200)
-		id -=200;
-	
+
 	if(is_user_connected(id))
 	{	
 		Cache_RemovePlayer(id);

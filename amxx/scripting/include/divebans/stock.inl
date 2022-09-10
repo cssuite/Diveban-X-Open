@@ -252,30 +252,57 @@ stock get_player_marker(id, Handle:Query, marker[], len)
 		return 0;
 	
 	new mark[34];
+	new banType[16];
+
+	SQL_ReadResult(Query, SQL_FieldNameToNum(Query,"bantype"), banType, charsmax(banType));
+
+	/** AuthId */
 	SQL_ReadResult(Query, SQL_FieldNameToNum(Query,"steam"), mark, charsmax(mark));
 	
-	if(equali(mark, g_info_player[id][CS_PLAYER_ID]))
+	if(equali(mark, g_info_player[id][CS_PLAYER_ID]) && contain(banType, "A") != -1)
 		return formatex(marker, len, "|SteamID|")
-	
+
+	/** Ip, Subnet, FullSubnet */
+	new subnet[BAN_IP_LEN], full_subnet[BAN_IP_LEN];
+
 	SQL_ReadResult(Query, SQL_FieldNameToNum(Query,"ip"), mark, charsmax(mark));
 
-	if(equali(mark, g_info_player[id][CS_PLAYER_IP]))
+	get_ip_subnet( 0, mark, charsmax(mark), subnet, charsmax(subnet))
+	get_ip_subnet( 1, mark, charsmax(mark), full_subnet, charsmax(full_subnet))
+
+	if(equali(mark, g_info_player[id][CS_PLAYER_IP]) && contain(banType, "I") != -1)
 		return formatex(marker, len, "|IP|")
 
-		
+	if (containi(mark, subnet) != -1 && contain(banType, "S") != -1) {
+		return formatex(marker, len, "|Subnet|")
+	}
+
+	if (containi(mark, full_subnet) != -1 && contain(banType, "F") != -1) {
+		return formatex(marker, len, "|Full Subnet|")
+	}
+
+	/** UID */
+	SQL_ReadResult(Query, SQL_FieldNameToNum(Query,"uid"), mark, charsmax(mark));
+
+	if(equali(mark, g_info_player[id][CS_PLAYER_UID]) && contain(banType, "U") != -1)
+		return formatex(marker, len, "|UID|")
+
+	/** Cookie */
 	SQL_ReadResult(Query, SQL_FieldNameToNum(Query,"ipcookie"), mark, charsmax(mark));
 
-	if(equali(mark, g_info_player[id][CS_PLAYER_IP]))
+	if(equali(mark, g_info_player[id][CS_PLAYER_IP])  && contain(banType, "C") != -1)
 		return formatex(marker, len, "|IP Cookie|")
 
+	/** DivID */
 	SQL_ReadResult(Query, SQL_FieldNameToNum(Query,"diveid"), mark, charsmax(mark));
 
-	if(equali(mark, g_DiveID[id]))
+	if(equali(mark, g_DiveID[id])  && contain(banType, "D") != -1)
 		return formatex(marker, len, "|DiveID|") 
 
+	/** CdKey */
 	SQL_ReadResult(Query, SQL_FieldNameToNum(Query,"cdkey"), mark, charsmax(mark));
 
-	if(equali(mark, g_iCDKey[id]))
+	if(equali(mark, g_iCDKey[id])  && contain(banType, "K") != -1)
 		return formatex(marker, len, "|CD-Key|")
 			
 	return 1;

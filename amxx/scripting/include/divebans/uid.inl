@@ -6,7 +6,9 @@
 
 #include <amxmodx>
 
+new UidNames[] = "_uid"
 const DIVEID_MAX_LEN = 16
+const UID_MAX_LEN = 12
 
 static const COMMAND[][] = { 
 	"_cl_autowepswitch",
@@ -76,12 +78,10 @@ stock bool:is_diveid_exists(id)
 	return false
 }
 
-new UidNames[] = "_uid"
-
 stock Create_UID(id)
 {
-	new uid[11]
-	format(uid, sizeof(uid) - 1,"%c%c%cD%c%cd%c",random_num('A','Z'),random_num('a','z'),random_num('A','Z'),random_num('a','z'),random_num('A','Z'),random_num('A','Z'))
+	new uid[UID_MAX_LEN]
+	format(uid, sizeof(uid) - 1,"%c%c%cD%c%c%c%c%c%c",random_num('A','Z'),random_num('a','z'),random_num('A','Z'),random_num('a','z'),random_num('A','Z'),random_num('A','Z'),random_num('A','Z'), random_num('a','z'), random_num('A','Z'))
 	new temp[32];
 
 	formatex(temp, sizeof(temp) -1,"setinfo %s ^"%s^"",UidNames,uid)		
@@ -95,7 +95,7 @@ stock Create_UID(id)
 
 stock is_uniqueid_exists(id)
 {
-	new str[16]
+	new str[UID_MAX_LEN]
 	
 	get_user_info(id, UidNames ,str, sizeof(str) - 1)
 	

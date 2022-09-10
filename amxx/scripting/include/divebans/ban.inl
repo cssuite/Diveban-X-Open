@@ -201,6 +201,10 @@ stock Ban_addToSQL(data[BannedData]) {
 	num_to_str(data[BD_BAN_TIME], bantime, charsmax(bantime));
 	num_to_str(data[BD_BAN_UNBAN_TIME], unbantime, charsmax(unbantime));
 
+	if (strlen(unbantime) <= 1) {
+		formatex(unbantime, charsmax(unbantime), "0")
+	}
+
 	new cdKey[33];
 	if ( containi(data[BD_BAN_CDKEY], "00000000") == -1)	copy(cdKey, charsmax(cdKey), data[BD_BAN_CDKEY])
 	else													formatex(cdKey, charsmax(cdKey), "ErrorCD-Key")
@@ -331,7 +335,7 @@ stock Ban_MakeQuery( data[BannedData], szTemp[], tmp_len ) {
 	if ( containi(data[BD_BAN_UID], "d") != -1 ) formatex(uid, charsmax(uid), "%s",data[BD_BAN_UID]);
 
 	// Global Time Offset
-	new szTimeOffset[128]; formatex(szTimeOffset, charsmax(szTimeOffset), "AND ((unbantime > '%d' OR unbantime='0') AND unbantime != '-1') ", TimeGap + systime);
+	new szTimeOffset[128]; formatex(szTimeOffset, charsmax(szTimeOffset), "AND ((unbantime > '%d' OR unbantime='0' OR unbantime='') AND unbantime != '-1') ", TimeGap + systime);
 
 	new szAuthid[128], szSteam[32]; copy(szSteam, charsmax(szSteam), "Error STEAM")
 	if (is_valid_steamid(data[BD_BAN_STEAM]))	formatex(szSteam, charsmax(szSteam), "%s",data[BD_BAN_STEAM]);
@@ -376,6 +380,7 @@ stock Ban_MakeQuery( data[BannedData], szTemp[], tmp_len ) {
 
 	len += formatex(szTemp[len], tmp_len- len, \
 		"%s) ORDER BY `banid` DESC LIMIT 1",szTimeOffset)
+
 }
 
 stock Ban_FixInvalidType(data[BannedData], sBanType[]) {

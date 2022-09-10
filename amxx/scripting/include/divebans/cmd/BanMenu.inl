@@ -29,7 +29,7 @@ CmdMainBanMenu(id)
 	new status[32], UserStatus:st;
 	get_user_status(id, st, status, charsmax(status))
 
-  	new title[128]; formatex(title, sizeof(title) - 1, "\r%L^n\w%L:%s", id, "DB_MENU_MAIN_TITLE", id, "DB_MENU_MAIN_STATUS", status)
+  	new title[128]; formatex(title, sizeof(title) - 1, "\r%L^n\w%L: %s", id, "DB_MENU_MAIN_TITLE", id, "DB_MENU_MAIN_STATUS", status)
 	new Menu = menu_create(title, "menu_main")
 	MenuSetProps( id, Menu)
 	
