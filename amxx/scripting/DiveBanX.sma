@@ -4,7 +4,6 @@
 #include <amxmisc>
 #include <sqlx>
 #include <fakemeta>
-#include <sockets>
 
 new const PLUGIN[]=		"DiveBanX"
 new const VERSION[]=	"2021.1"
